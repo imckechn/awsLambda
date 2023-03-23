@@ -1,8 +1,8 @@
 import json
 import boto3
 
-aws_access_key_id = X
-aws_secret_access_key = X
+aws_access_key_id = "x"
+aws_secret_access_key = "x"
 client_res = boto3.resource('s3', region_name='ca-central-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
 client = boto3.client('s3', region_name='ca-central-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
 
@@ -28,10 +28,11 @@ def lambda_handler(event, context):
     #Get the subscription list
     subscriptionList = client.get_object(Bucket='subscribercollectionianmckechnie', Key='subscribers')
 
-    subs = subscriptionList.get()['Body'].read()
+    subs = subscriptionList['Body'].read()
 
     for sub in subs.splitlines():
-        print(sub)
+        sub = sub.decode()
+        print("sub ", sub)
+        print("type ", type(sub))
         #Send the email
-        client.meta.client.copy(copy_source, sub, newFilekey)
-
+        client_res.meta.client.copy(copy_source, sub, newFilekey)
