@@ -30,9 +30,20 @@ def lambda_handler(event, context):
 
     subs = subscriptionList['Body'].read()
 
-    for sub in subs.splitlines():
-        sub = sub.decode()
-        print("sub ", sub)
-        print("type ", type(sub))
-        #Send the email
-        client_res.meta.client.copy(copy_source, sub, newFilekey)
+    for subBucket in subs.splitlines():
+        subBucket = subBucket.decode()
+
+        #Check if the bucket exists, if not, create it
+        print("bucket =", subBucket)
+        try:
+            client_res.meta.client.head_bucket(Bucket=subBucket)
+        except:
+            client.create_bucket(
+                Bucket='subBucket',
+                CreateBucketConfiguration={
+                    'LocationConstraint': 'ca-central-1',
+                },
+            )
+
+        #Copy the s3 object over to the subscriber
+        client_res.meta.client.copy(copy_source, subBucket, newFilekey)
