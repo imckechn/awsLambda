@@ -1,12 +1,18 @@
 import boto3
 from datetime import datetime
+import configparser
 
-aws_access_key_id = "x"
-aws_secret_access_key = "x"
-client_res = boto3.resource('s3', region_name='ca-central-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
-client = boto3.client('s3', region_name='ca-central-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
 
 def lambda_handler(event, context):
+    awsConfig = configparser.ConfigParser()
+    awsConf = "aws.conf"
+    awsConfig.read(awsConf)
+
+    aws_access_key_id = awsConfig['default']['aws_access_key_id']
+    aws_secret_access_key = awsConfig['default']['aws_secret_access_key']
+    client_res = boto3.resource('s3', region_name='ca-central-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+    client = boto3.client('s3', region_name='ca-central-1', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+
 
     logFileBody = ""
 
