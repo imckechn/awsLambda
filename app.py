@@ -31,7 +31,6 @@ def lambda_handler(event, context):
         logFileBody += "Found new file: " + newFilekey + "\n"
     except Exception as e:
         print(e)
-        print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(key, bucket))
         raise e
 
 
@@ -73,8 +72,6 @@ def lambda_handler(event, context):
 
         except:
             logFileBody += "Error copying file to " + subBucket + "\n"
-
-
 
     #Write the logfile
     now = datetime.now()
